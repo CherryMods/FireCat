@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class zPbaa extends JavaPlugin {
+public class FireCat extends JavaPlugin {
 
     Player player;
 
