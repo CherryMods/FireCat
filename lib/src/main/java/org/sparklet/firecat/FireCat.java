@@ -28,17 +28,13 @@ public class FireCat extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender interpreter, Command cmd, String input,
             String[] args) {
-        // The plugin only has 1 command. Remove this later if more are added.
-        if (!input.equals("firecat")) {
-            return false;
-        }
-
         if (interpreter instanceof Player) {
+            Player player = (Player) interpreter;
+
             if (args.length != 1) {
                 return false;
             }
 
-            Player player = (Player) interpreter;
             switch (args[0]) {
                 case "on":
                     fireCats.put(player, true);
