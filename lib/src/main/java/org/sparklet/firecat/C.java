@@ -1,13 +1,10 @@
-package solarsystem.coffee.utilz;
+package org.sparklet.firecat;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
 
 public class C {
-    public C() {
-    }
-
     public static String color(String msg) {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
