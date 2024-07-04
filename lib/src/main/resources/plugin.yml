@@ -1,0 +1,14 @@
+## YAML Template.
+---
+
+author: zP0
+name: zP_baa
+version: 1.0.0
+load: POSTWORLD
+main: solarsystem.coffee.zPbaa
+
+commands:
+  baa:
+    description: baa someone
+  boop:
+    description: baa someone
