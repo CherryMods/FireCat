@@ -1,22 +1,26 @@
 package org.sparklet.firecat;
 
 import java.util.HashMap;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+// import org.bukkit.potion.PotionEffectType;
 
-public class FireCat extends JavaPlugin {
+public class FireCat extends JavaPlugin implements Listener {
     /// All users who have firecat enabled.
-    HashMap<Player, Boolean> fireCats = new HashMap<>();
+    HashMap<UUID, Boolean> fireCats = new HashMap<>();
 
     @Override
     public void onEnable() {
         Bukkit.getServer().getConsoleSender().sendMessage("FireCat enabled");
+        getServer().getPluginManager().registerEvents(new PotionListener(), this);
     }
 
     @Override
@@ -35,12 +39,14 @@ public class FireCat extends JavaPlugin {
                 return false;
             }
 
+            UUID uuid = player.getUniqueId();
+
             switch (args[0]) {
                 case "on":
-                    fireCats.put(player, true);
+                    fireCats.put(uuid, true);
                     break;
                 case "off":
-                    fireCats.put(player, false);
+                    fireCats.put(uuid, false);
                     break;
                 default:
                     return false;
@@ -50,12 +56,26 @@ public class FireCat extends JavaPlugin {
         return true;
     }
 
-    public class PotionListener implements Listener {
+    class PotionListener implements Listener {
         @EventHandler
-        public void onEntityDeathEvent(EntityDeathEvent event) {
-            if (event == null) {
-                return;
+        public void onPotionDrink(EntityPotionEffectEvent event) {
+            Bukkit.getServer().broadcastMessage("Potion event");
+            Entity entity = event.getEntity();
+
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
+                UUID uuid = player.getUniqueId();
+
+                boolean isFireCat = fireCats.containsKey(uuid) && fireCats.get(uuid);
+                if (!isFireCat) {
+                    Bukkit.getServer().broadcastMessage("Not a fire resistance cat!");
+                    return;
+                }
+
+                Bukkit.getServer().broadcastMessage(uuid + " just drank a potion.");
             }
+
+            // if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
         }
     }
 }
