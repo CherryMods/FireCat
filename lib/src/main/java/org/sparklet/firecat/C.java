@@ -10,7 +10,7 @@ public class C {
     }
 
     public static List<String> colorLines(List<String> lore) {
-        List<String> color = new ArrayList<String>();
+        List<String> color = new ArrayList<>();
 
         for (String s : lore) {
             color.add(color(s));
