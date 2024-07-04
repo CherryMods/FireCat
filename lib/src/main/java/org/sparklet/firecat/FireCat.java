@@ -18,6 +18,10 @@ public class FireCat extends JavaPlugin implements Listener {
     /// All users who have firecat enabled.
     HashMap<UUID, Boolean> fireCats = new HashMap<>();
 
+    final String ENABLE_MSG = C.color("&6Fire resistance potions will now turn you into a cat!");
+    final String DISABLE_MSG = C.color(
+            "&6Fire resistance potions will no longer turn you into a cat...");
+
     final String TRANSFORM_MSG = C.color("&6Your fire resistance has turned you into a cat!");
     final String DETRANSFORM_MSG = C.color("&6Your fire resistance ran out, so you are once again human.");
 
@@ -29,7 +33,6 @@ public class FireCat extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-
         Bukkit.getServer().getConsoleSender().sendMessage("FireCat disabled");
     }
 
@@ -48,9 +51,11 @@ public class FireCat extends JavaPlugin implements Listener {
             switch (args[0]) {
                 case "on":
                     fireCats.put(uuid, true);
+                    player.sendMessage(ENABLE_MSG);
                     break;
                 case "off":
                     fireCats.put(uuid, false);
+                    player.sendMessage(DISABLE_MSG);
                     Disguise.undisguise(player.getName());
                     break;
                 default:
