@@ -5,6 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FireCat extends JavaPlugin {
@@ -49,5 +52,14 @@ public class FireCat extends JavaPlugin {
         }
 
         return true;
+    }
+
+    public class PotionListener implements Listener {
+        @EventHandler
+        public void onEntityDeathEvent(EntityDeathEvent event) {
+            if (event == null) {
+                return;
+            }
+        }
     }
 }
