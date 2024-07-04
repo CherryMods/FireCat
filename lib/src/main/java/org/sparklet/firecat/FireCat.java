@@ -18,11 +18,10 @@ public class FireCat extends JavaPlugin implements Listener {
     /// All users who have firecat enabled.
     HashMap<UUID, Boolean> fireCats = new HashMap<>();
 
-    final String ENABLE_MSG = C.color("&6Fire resistance potions will now turn you into a cat!");
-    final String DISABLE_MSG = C.color(
-            "&6Fire resistance potions will no longer turn you into a cat...");
+    final String ENABLE_MSG = C.color("&6Fire resistance potions now taste extra sweet!");
+    final String DISABLE_MSG = C.color("&6Fire resistance potions no longer taste extra sweet...");
 
-    final String TRANSFORM_MSG = C.color("&6Your fire resistance has turned you into a cat!");
+    final String TRANSFORM_MSG = C.color("&6Fire resistance has turned you into a cat!");
     final String DETRANSFORM_MSG = C.color("&6Your fire resistance ran out, so you are once again human.");
 
     @Override
