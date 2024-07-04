@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./gradlew build
+scp -P 1337 lib/build/libs/FireCat.jar mira@solarsystem.coffee:/home/risingphoenix/phoenix/plugins/
