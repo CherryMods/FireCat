@@ -5,15 +5,14 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-// import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class FireCat extends JavaPlugin implements Listener {
     /// All users who have firecat enabled.
@@ -66,8 +65,6 @@ public class FireCat extends JavaPlugin implements Listener {
             }
 
             Player player = (Player) event.getEntity();
-            Bukkit.getServer().broadcastMessage("Potion event");
-
             UUID uuid = player.getUniqueId();
 
             boolean isFireCat = fireCats.containsKey(uuid) && fireCats.get(uuid);
@@ -75,10 +72,17 @@ public class FireCat extends JavaPlugin implements Listener {
                 return;
             }
 
-            Bukkit.getServer().broadcastMessage(uuid + " just drank a potion.");
             PotionEffect newFX = event.getNewEffect();
+            if (newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
+                Bukkit.getServer().broadcastMessage(uuid +
+                        " just drank fire resistance!");
+            }
 
-            // if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
+            PotionEffect oldFX = event.getNewEffect();
+            if (oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
+                Bukkit.getServer().broadcastMessage(
+                        uuid + " just ran out of fire resistance!");
+            }
         }
     }
 }
