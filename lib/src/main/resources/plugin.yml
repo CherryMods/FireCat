@@ -8,6 +8,7 @@ load: POSTWORLD
 main: org.sparklet.firecat.FireCat
 description: Allows certain people to turn into a cat when drinking Fire Resistance Potions. Requires Lib's Disguises.
 website: https://github.com/Lamby777/FireCat
+softdepend: [LibsDisguises]
 
 commands:
   firecat:
