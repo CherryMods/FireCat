@@ -18,6 +18,9 @@ public class FireCat extends JavaPlugin implements Listener {
     /// All users who have firecat enabled.
     HashMap<UUID, Boolean> fireCats = new HashMap<>();
 
+    final String TRANSFORM_MSG = C.color("&6Your fire resistance has turned you into a cat!");
+    final String DETRANSFORM_MSG = C.color("&6Your fire resistance ran out, so you are once again human.");
+
     @Override
     public void onEnable() {
         Bukkit.getServer().getConsoleSender().sendMessage("FireCat enabled");
@@ -77,7 +80,7 @@ public class FireCat extends JavaPlugin implements Listener {
             PotionEffect newFX = event.getNewEffect();
             if (newFX != null &&
                     newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                player.sendMessage("Your fire resistance has turned you into a cat!");
+                player.sendMessage(TRANSFORM_MSG);
                 Disguise.disguise(player.getName(), "cat");
                 return;
             }
@@ -85,8 +88,7 @@ public class FireCat extends JavaPlugin implements Listener {
             // if old effect was fire res and new is null
             PotionEffect oldFX = event.getOldEffect();
             if (oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                player.sendMessage(
-                        "Your fire resistance ran out, so you are once again human.");
+                player.sendMessage(DETRANSFORM_MSG);
                 Disguise.undisguise(player.getName());
                 return;
             }
