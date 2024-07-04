@@ -14,54 +14,54 @@ public class FireCat extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Bukkit.getServer().getConsoleSender().sendMessage("zPbaa enabled");
+        Bukkit.getServer().getConsoleSender().sendMessage("FireCat enabled");
     }
 
     @Override
     public void onDisable() {
 
-        Bukkit.getServer().getConsoleSender().sendMessage("zPbaa disabled");
+        Bukkit.getServer().getConsoleSender().sendMessage("FireCat disabled");
     }
 
     @Override
     public boolean onCommand(CommandSender interpreter, Command cmd, String input,
             String[] args) {
+        // The plugin only has 1 command. Remove this later if more are added.
+        if (!input.equals("firecat")) {
+            return false;
+        }
 
         player = (Player) interpreter;
 
         if (interpreter instanceof Player) {
+            if (args.length != 1) {
+                player.sendMessage(C.color("&6use: /baa or /boop playername"));
+                return false;
+            }
 
-            if (input.equals("baa") || input.equals("boop")) {
+            String Name = args[0];
 
-                if (args.length != 1) {
-                    player.sendMessage(C.color("&6use: /baa or /boop playername"));
-                    return false;
+            Player Target = null;
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().equalsIgnoreCase(Name)) {
+                    Target = p;
                 }
+            }
 
-                String Name = args[0];
-
-                Player Target = null;
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (p.getName().equalsIgnoreCase(Name)) {
-                        Target = p;
-                    }
-                }
-
-                // Execute Boop
-                if (Target != null) {
-                    Target.sendMessage(C.color("&6&l" + player.getName() + "&6 send you "
-                            + "&6&l✂ Baaaaaaaaaaaa ✂ "));
-                    Target.playSound(Target.getLocation(), Sound.ENTITY_SHEEP_AMBIENT,
-                            (float) 40.0, (float) 18.0);
-                    player.sendMessage(C.color("&6&l| &6&l✂ Baaaa ✂ &4&l| &6&l" +
-                            Target.getName() + " &6&l <3 &6&l| "));
-                } else {
-                    player.sendMessage(ChatColor.LIGHT_PURPLE +
-                            "Target Player not found");
-                }
-                return true;
+            // Execute Boop
+            if (Target != null) {
+                Target.sendMessage(C.color("&6&l" + player.getName() + "&6 send you "
+                        + "&6&l✂ Baaaaaaaaaaaa ✂ "));
+                Target.playSound(Target.getLocation(), Sound.ENTITY_SHEEP_AMBIENT,
+                        (float) 40.0, (float) 18.0);
+                player.sendMessage(C.color("&6&l| &6&l✂ Baaaa ✂ &4&l| &6&l" +
+                        Target.getName() + " &6&l <3 &6&l| "));
+            } else {
+                player.sendMessage(ChatColor.LIGHT_PURPLE + ("Target Player not "
+                        + "found"));
             }
         }
+
         return true;
     }
 }
