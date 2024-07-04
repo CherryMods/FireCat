@@ -48,6 +48,7 @@ public class FireCat extends JavaPlugin implements Listener {
                     break;
                 case "off":
                     fireCats.put(uuid, false);
+                    Disguise.undisguise(player.getName());
                     break;
                 default:
                     return false;
@@ -74,8 +75,10 @@ public class FireCat extends JavaPlugin implements Listener {
 
             // if drank fire res
             PotionEffect newFX = event.getNewEffect();
-            if (newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
+            if (newFX != null &&
+                    newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
                 Bukkit.getServer().broadcastMessage("Drank fire resistance!");
+                Disguise.disguise(player.getName(), "cat");
                 return;
             }
 
@@ -83,6 +86,7 @@ public class FireCat extends JavaPlugin implements Listener {
             PotionEffect oldFX = event.getOldEffect();
             if (oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
                 Bukkit.getServer().broadcastMessage("Ran out of fire resistance!");
+                Disguise.undisguise(player.getName());
                 return;
             }
         }
