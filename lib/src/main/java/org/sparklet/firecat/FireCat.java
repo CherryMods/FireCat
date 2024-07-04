@@ -72,16 +72,18 @@ public class FireCat extends JavaPlugin implements Listener {
                 return;
             }
 
+            // if drank fire res
             PotionEffect newFX = event.getNewEffect();
             if (newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                Bukkit.getServer().broadcastMessage(uuid +
-                        " just drank fire resistance!");
+                Bukkit.getServer().broadcastMessage("Drank fire resistance!");
+                return;
             }
 
-            PotionEffect oldFX = event.getNewEffect();
+            // if old effect was fire res and new is null
+            PotionEffect oldFX = event.getOldEffect();
             if (oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                Bukkit.getServer().broadcastMessage(
-                        uuid + " just ran out of fire resistance!");
+                Bukkit.getServer().broadcastMessage("Ran out of fire resistance!");
+                return;
             }
         }
     }
