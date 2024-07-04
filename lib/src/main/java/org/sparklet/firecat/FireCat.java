@@ -77,7 +77,7 @@ public class FireCat extends JavaPlugin implements Listener {
             PotionEffect newFX = event.getNewEffect();
             if (newFX != null &&
                     newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                Bukkit.getServer().broadcastMessage("Drank fire resistance!");
+                player.sendMessage("Your fire resistance has turned you into a cat!");
                 Disguise.disguise(player.getName(), "cat");
                 return;
             }
@@ -85,7 +85,8 @@ public class FireCat extends JavaPlugin implements Listener {
             // if old effect was fire res and new is null
             PotionEffect oldFX = event.getOldEffect();
             if (oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                Bukkit.getServer().broadcastMessage("Ran out of fire resistance!");
+                player.sendMessage(
+                        "Your fire resistance ran out, so you are once again human.");
                 Disguise.undisguise(player.getName());
                 return;
             }
