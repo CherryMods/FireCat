@@ -91,7 +91,8 @@ public class FireCat extends JavaPlugin implements Listener {
 
             // if old effect was fire res and new is null
             PotionEffect oldFX = event.getOldEffect();
-            if (oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
+            if (oldFX != null &&
+                    oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
                 player.sendMessage(DETRANSFORM_MSG);
                 Disguise.undisguise(player.getName());
                 return;
