@@ -24,6 +24,10 @@ public class FireCat extends JavaPlugin implements Listener {
     final String TRANSFORM_MSG = C.color("&6Fire resistance has turned you into a cat!");
     final String DETRANSFORM_MSG = C.color("&6Your fire resistance ran out, so you are once again human.");
 
+    // default enabled or disabled.
+    // TODO config file
+    final boolean DEFAULT_FC_MODE = true;
+
     @Override
     public void onEnable() {
         Bukkit.getServer().getConsoleSender().sendMessage("FireCat enabled");
@@ -66,6 +70,11 @@ public class FireCat extends JavaPlugin implements Listener {
     }
 
     class PotionListener implements Listener {
+        boolean isFireCat(UUID uuid) {
+            boolean hasKey = fireCats.containsKey(uuid);
+            return (hasKey && fireCats.get(uuid)) || DEFAULT_FC_MODE;
+        }
+
         @EventHandler
         public void onPotionDrink(EntityPotionEffectEvent event) {
             if (event.getEntity().getType() != EntityType.PLAYER) {
@@ -75,8 +84,7 @@ public class FireCat extends JavaPlugin implements Listener {
             Player player = (Player) event.getEntity();
             UUID uuid = player.getUniqueId();
 
-            boolean isFireCat = fireCats.containsKey(uuid) && fireCats.get(uuid);
-            if (!isFireCat) {
+            if (!isFireCat(uuid)) {
                 return;
             }
 
