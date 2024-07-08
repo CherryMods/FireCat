@@ -73,10 +73,9 @@ public class FireCat extends JavaPlugin implements Listener {
             UUID uuid = player.getUniqueId();
 
             boolean hasKey = fireCats.containsKey(uuid);
-            boolean choice = fireCats.get(uuid);
             boolean isFCByDefault = player.hasPermission(FC_DEFAULT_ENABLE_PERM);
 
-            return (hasKey && choice) || (!hasKey && isFCByDefault);
+            return (hasKey && fireCats.get(uuid)) || (!hasKey && isFCByDefault);
         }
 
         @EventHandler
