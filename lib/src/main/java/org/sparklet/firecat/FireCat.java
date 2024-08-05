@@ -1,5 +1,6 @@
 package org.sparklet.firecat;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -16,16 +17,34 @@ import org.bukkit.potion.PotionEffectType;
 
 public class FireCat extends JavaPlugin implements Listener {
     /// All users who have firecat enabled.
-    HashMap<UUID, Boolean> fireCats = new HashMap<>();
+    HashMap<UUID, boolean[]> fireCats = new HashMap<>();
 
-    final String ENABLE_MSG = C.color("&6Fire resistance potions now taste extra sweet!");
-    final String DISABLE_MSG = C.color("&6Fire resistance potions no longer taste extra sweet...");
+    final String[] ENABLE_MSG = {
+            C.color("&6Fire resistance potions now taste extra sweet!"),
+            C.color("&6Water breathing potions now taste a bit less salty!"),
+    };
+    final String[] DISABLE_MSG = {
+            C.color("&6Fire resistance potions no longer taste extra sweet..."),
+            C.color("&6Water breathing potions no longer taste less salty..."),
+    };
 
-    final String TRANSFORM_MSG = C.color("&6Fire resistance has turned you into a cat!");
-    final String DETRANSFORM_MSG = C.color("&6Your fire resistance ran out, so you are once again human.");
+    final String[] TRANSFORM_MSG = {
+            C.color("&6Fire resistance has turned you into a cat!"),
+            C.color("&6Water breathing has turned you into a salmon!"),
+    };
+    final String[] DETRANSFORM_MSG = {
+            C.color("&6Your fire resistance ran out, so you are once again human."),
+            C.color("&6Your water breathing ran out, so you are once again human."),
+    };
 
-    // people with this permission will have firecat enabled by default
-    final String FC_DEFAULT_ENABLE_PERM = "firecat.default";
+    // Potion mob ids
+    final int PM_CAT = 0;
+    final int PM_SALMON = 1;
+
+    final String[] POTION_MOBS = {
+            "cat",
+            "salmon",
+    };
 
     @Override
     public void onEnable() {
@@ -44,38 +63,49 @@ public class FireCat extends JavaPlugin implements Listener {
         if (interpreter instanceof Player) {
             Player player = (Player) interpreter;
 
-            if (args.length != 1) {
+            if (args.length < 2) {
                 return false;
             }
 
             UUID uuid = player.getUniqueId();
 
-            switch (args[0]) {
+            int index = Arrays.asList(POTION_MOBS).indexOf(args[0]);
+            if (index == -1) {
+                return false;
+            }
+
+            boolean[] map = fireCats.getOrDefault(uuid, new boolean[2]);
+            switch (args[1]) {
                 case "on":
-                    fireCats.put(uuid, true);
-                    player.sendMessage(ENABLE_MSG);
+                    map[index] = true;
+                    player.sendMessage(ENABLE_MSG[index]);
                     break;
                 case "off":
-                    fireCats.put(uuid, false);
-                    player.sendMessage(DISABLE_MSG);
+                    map[index] = false;
+                    player.sendMessage(DISABLE_MSG[index]);
                     Disguise.undisguise(player.getName());
                     break;
                 default:
                     return false;
             }
+
+            // only required for people who didn't previously have an entry
+            fireCats.put(uuid, map);
         }
 
         return true;
     }
 
     class PotionListener implements Listener {
-        boolean isFireCat(Player player) {
+        boolean isFireCat(Player player, int potionMobId) {
             UUID uuid = player.getUniqueId();
 
             boolean hasKey = fireCats.containsKey(uuid);
-            boolean isFCByDefault = player.hasPermission(FC_DEFAULT_ENABLE_PERM);
+            String permNode = "firecat." + POTION_MOBS[potionMobId] + ".default";
+            boolean isFCByDefault = player.hasPermission(permNode);
 
-            return (hasKey && fireCats.get(uuid)) || (!hasKey && isFCByDefault);
+            boolean[] map = fireCats.get(uuid);
+            return (hasKey && map[potionMobId]) || (!hasKey && isFCByDefault);
         }
 
         @EventHandler
@@ -86,26 +116,48 @@ public class FireCat extends JavaPlugin implements Listener {
 
             Player player = (Player) event.getEntity();
 
-            if (!isFireCat(player)) {
-                return;
+            //
+            // TODO no more hardcoding
+            //
+
+            if (isFireCat(player, PM_CAT)) {
+                // if drank fire res
+                PotionEffect newFX = event.getNewEffect();
+                if (newFX != null &&
+                        newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
+                    player.sendMessage(TRANSFORM_MSG[PM_CAT]);
+                    Disguise.disguise(player.getName(), "cat");
+                    return;
+                }
+
+                // if old effect was fire res and new is null
+                PotionEffect oldFX = event.getOldEffect();
+                if (oldFX != null &&
+                        oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
+                    player.sendMessage(DETRANSFORM_MSG[PM_CAT]);
+                    Disguise.undisguise(player.getName());
+                    return;
+                }
             }
 
-            // if drank fire res
-            PotionEffect newFX = event.getNewEffect();
-            if (newFX != null &&
-                    newFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                player.sendMessage(TRANSFORM_MSG);
-                Disguise.disguise(player.getName(), "cat");
-                return;
-            }
+            if (isFireCat(player, PM_SALMON)) {
+                // if drank water breathing
+                PotionEffect newFX = event.getNewEffect();
+                if (newFX != null &&
+                        newFX.getType() == PotionEffectType.WATER_BREATHING) {
+                    player.sendMessage(TRANSFORM_MSG[PM_SALMON]);
+                    Disguise.disguise(player.getName(), "salmon");
+                    return;
+                }
 
-            // if old effect was fire res and new is null
-            PotionEffect oldFX = event.getOldEffect();
-            if (oldFX != null &&
-                    oldFX.getType() == PotionEffectType.FIRE_RESISTANCE) {
-                player.sendMessage(DETRANSFORM_MSG);
-                Disguise.undisguise(player.getName());
-                return;
+                // if old effect was fire res and new is null
+                PotionEffect oldFX = event.getOldEffect();
+                if (oldFX != null &&
+                        oldFX.getType() == PotionEffectType.WATER_BREATHING) {
+                    player.sendMessage(DETRANSFORM_MSG[PM_SALMON]);
+                    Disguise.undisguise(player.getName());
+                    return;
+                }
             }
         }
     }

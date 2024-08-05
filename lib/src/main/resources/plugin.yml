@@ -13,8 +13,8 @@ softdepend: [LibsDisguises]
 commands:
   firecat:
     aliases: [fc]
-    usage: "Usage: /firecat [on/off]"
-    description: Enable or disable the Fire Resistance Cat transformation effect
+    usage: "Usage: /firecat <cat|salmon> <on/off>"
+    description: Enable or disable potion transformation effects
     permission: firecat.allow
     permission-message: "You may not use this feature."
 
