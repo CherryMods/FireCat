@@ -3,10 +3,18 @@
 World's [second](https://github.com/IIIzP0III/zP--baa) tiniest plugin.
 
 Does one thing and does it decently well:
-Anyone who has Fire Resistance and also has this feature enabled will turn into a cat. :3
+Certain potions will turn you into a mob.
 
-Requires Lib's Disguises to work, but it uses console commands so it'll work on the free version as well.
+- Anyone who has Fire Resistance with this enabled will turn into a kitty. :3
+- Anyone who has Water Breathing with this enabled will turn into a foosh (salmon). 🐟
 
-Usage: `/fc on` or `/fc off`
+Requires Lib's Disguises to work, but it uses console commands so it'll work on the
+free version as well.
 
-Permission node required: `firecat.allow`
+Usage: `/fc <cat|salmon> on` or `/fc <cat|salmon> off`
+
+By default, the plugin does nothing. To enable it for everyone or allow people to
+selectively enable it, you need to set the correct permission nodes:
+
+- `firecat.<mob>.allow` (usage of the enable/disable command)
+- `firecat.<mob>.default` (default enable the feature)
